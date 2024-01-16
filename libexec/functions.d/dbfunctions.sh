@@ -544,7 +544,7 @@ function db_index_slackbuilds
 # No parameters.
 {
   MY_SBLIST="$MYTMP"/sblist
-  ( cd "$SR_SBREPO"; find . -name '.git' -prune -o -type f -name '*.SlackBuild' -print | sed 's/^\.\///' > "$MY_SBLIST" )
+  ( cd "$SR_SBREPO"; find . -maxdepth 3 -name '.git' -prune -o -type f -name '*.SlackBuild' -print | sed 's/^\.\///' > "$MY_SBLIST" )
   echo -e \
     "drop table if exists slackbuilds; create table slackbuilds(relpath text);\n.mode csv\n.import $MY_SBLIST slackbuilds" \
     | sqlite3 "$SR_DATABASE"
