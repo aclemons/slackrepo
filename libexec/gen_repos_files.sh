@@ -281,7 +281,7 @@ function addpkg {
   PKG=$1
   PACKAGESFILE=$2
 
-  if [ "$(echo $PKG|grep -E '(.*{1,})\-(.*[\.\-].*[\.\-].*).t[blxg]z[ ]{0,}$')" == "" ];
+  if [ "$(echo $PKG|grep -E '(.*{1,})-(.*[\.-].*[\.-].*).t[blxg]z[ ]{0,}$')" == "" ];
   then
     return;
   fi
@@ -371,7 +371,7 @@ function addman {
   PKG=$1
   MANIFESTFILE=$2
 
-  if [ "$(echo $PKG|grep -E '(.*{1,})\-(.*[\.\-].*[\.\-].*).t[blxg]z[ ]{0,}$')" == "" ];
+  if [ "$(echo $PKG|grep -E '(.*{1,})-(.*[\.-].*[\.-].*).t[blxg]z[ ]{0,}$')" == "" ];
   then
     return;
   fi
