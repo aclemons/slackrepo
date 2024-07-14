@@ -649,7 +649,7 @@ fi
 declare -A KEEPINSTALLED
 # Warn about already installed packages (using package tag)
 if [ -n "$SR_TAG" ] && [ "$OPT_INSTALL" != 'y' ] && [ "$CMD" != 'remove' ]; then
-  for pkg in /var/log/packages/*"$SR_TAG"; do
+  for pkg in $OPT_CHROOT/var/log/packages/*"$SR_TAG"; do
     if [ -f "$pkg" ]; then
       pkgid="${pkg##*/}"
       [ "${#KEEPINSTALLED[@]}" = 0 ] && log_warning -s "Packages with tag $SR_TAG are already installed"
