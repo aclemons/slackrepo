@@ -354,10 +354,10 @@ function build_item_packages
       ;;
     'rustup' )
       log_info -a "Pragma: rustup"
-      for lnk in cargo cargo-fmt rls rustc rustdoc rustfmt rust-gdb rust-lldb ; do
+      for lnk in cargo cargo-clippy cargo-fmt cargo-miri clippy-driver rls rust-analyzer rust-gdb rust-gdbgui rust-lldb rustc rustdoc rustfmt rustup ; do
         (
           cd /usr/local/sbin
-          ${SUDO}ln -s /usr/bin/rustup $lnk
+          ${SUDO}ln -s /usr/bin/rustup-init $lnk
         )
       done
       removerustup='y'
