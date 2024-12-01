@@ -185,7 +185,7 @@ function test_download
         curl --disable --connect-timeout 10 --retry 2 --fail --verbose --insecure --ciphers ALL --disable-epsv --ftp-method nocwd --location --user-agent slackrepo --head --output "$MY_HEADER" "$url" >> "$ITEMLOG" 2>&1
         curlstat=$?
         if [ "$curlstat" = 0 ]; then
-          remotelength=$(fromdos <"$MY_HEADER" | grep 'Content-[Ll]ength: ' | tail -n 1 | sed 's/^.* //')
+          remotelength=$(fromdos <"$MY_HEADER" | grep '[Cc]ontent-[Ll]ength: ' | tail -n 1 | sed 's/^.* //')
           # Proceed only if we seem to have extracted a valid content-length.
           if [ -n "$remotelength" ] && [ "$remotelength" != 0 ]; then
             # Filenames that have %nn encodings won't get checked.
