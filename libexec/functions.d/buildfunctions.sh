@@ -794,15 +794,15 @@ function chroot_setup
     # use yet another "small" tmpfs
     ${SUDO}mount -t tmpfs -o defaults,uid="$EUID",mode=755 tmpfs "$MY_CHRDIR"/"$HOME"
     CHRMOUNTS+=( "$MY_CHRDIR"/"$HOME" )
-    # bind in useful subdirs from the real home
-    for subdir in .ccache .distcc ; do
-      if [ -d "$HOME"/"$subdir" ]; then
-        ${SUDO}mkdir -p "$MY_CHRDIR"/"$HOME"/"$subdir"
-        ${SUDO}mount --bind "$HOME"/"$subdir" "$MY_CHRDIR"/"$HOME"/"$subdir"
-        CHRMOUNTS+=( "$MY_CHRDIR"/"$HOME"/"$subdir" )
-      fi
-    done
   fi
+  # bind in useful subdirs from the real home
+  for subdir in .ccache .distcc ; do
+    if [ -d "$HOME"/"$subdir" ]; then
+      ${SUDO}mkdir -p "$MY_CHRDIR"/"$HOME"/"$subdir"
+      ${SUDO}mount --bind "$HOME"/"$subdir" "$MY_CHRDIR"/"$HOME"/"$subdir"
+      CHRMOUNTS+=( "$MY_CHRDIR"/"$HOME"/"$subdir" )
+    fi
+  done
   if [ "$BLOCKX" != 'y' ] || [ -f "$HOME"/.Xauthority ]; then
     #### would a dummy X server be a lot of bother?
     ${SUDO}touch "$MY_CHRDIR"/"$HOME"/.Xauthority
