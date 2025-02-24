@@ -803,7 +803,7 @@ function chroot_setup
       CHRMOUNTS+=( "$MY_CHRDIR"/"$HOME"/"$subdir" )
     fi
   done
-  if [ "$BLOCKX" != 'y' ] || [ -f "$HOME"/.Xauthority ]; then
+  if [ "$BLOCKX" != 'y' ] && [ -f "$HOME"/.Xauthority ]; then
     #### would a dummy X server be a lot of bother?
     ${SUDO}touch "$MY_CHRDIR"/"$HOME"/.Xauthority
     ${SUDO}mount --bind "$HOME"/.Xauthority "$MY_CHRDIR"/"$HOME"/.Xauthority
