@@ -2,7 +2,7 @@
 # Copyright 2014 David Spencer, Baildon, West Yorkshire, U.K.
 # All rights reserved.  For licence details, see the file 'LICENCE'.
 #
-# errorscan_itemlog contains code and concepts from 'checkpkg' 1.32
+# errorscan_itemlog contains code and concepts from 'checkpkg' 1.46
 #   Copyright 2014-2017 Eric Hameleers, Eindhoven, The Netherlands
 #   All rights reserved.  For licence details, see the file 'LICENCE'.
 #   http://www.slackware.com/~alien/tools/checkpkg
@@ -446,9 +446,9 @@ function errorscan_itemlog
 # Return status: always 0
 {
   # This is Alien Bob being awesome, as usual :D
-  # now updated w.r.t. checkpkg v. 1.32
-  grep -E \
-    "aborted!|[[:space:]]too[[:space:]]old|FAIL|[[:space:]]hunk[[:space:]]ignored|[^A-Z]Error[[:space:]]|[^A-Z]ERROR[[:space:]]|Error:|error:|errors[[:space:]]occurred|ved[[:space:]]symbol|ndefined[[:space:]]reference[[:space:]]to|ost[[:space:]]recent[[:space:]]call[[:space:]]first|ot[[:space:]]found|annot[[:space:]]find[[:space:]]-l|make:[[:space:]]\*\*\*[[:space:]]No[[:space:]]|kipping[[:space:]]patch|skipping[[:space:]]incompatible[[:space:]]|t[[:space:]]seem[[:space:]]to[[:space:]]find[[:space:]]a[[:space:]]patch|[[:space:]]not[[:space:]]supported|^Usage:[[:space:]]|option[[:space:]]requires[[:space:]]|memory[[:space:]]exhausted|cannot[[:space:]]stat[[:space:]]|SlackBuild:[[:space:]]line|No[[:space:]]such[[:space:]]file|[Uu]nrecognised[[:space:]]xattr|[Uu]nknown[[:space:]]option" \
+  # now updated w.r.t. checkpkg v. 1.46
+  grep -E -nT \
+    "aborted!|[[:space:]]too[[:space:]]old|FAIL|[[:space:]]hunk[[:space:]]ignored|[^A-Z]Error[[:space:]]|[^A-Z]ERROR[[:space:]]|Error:|error:|errors[[:space:]]occurred|parser[[:space:]]error|ved[[:space:]]symbol|ndefined[[:space:]]reference[[:space:]]to|ost[[:space:]]recent[[:space:]]call[[:space:]]first|ot[[:space:]]found|annot[[:space:]]find[[:space:]]-l|make:[[:space:]]\*\*\*[[:space:]]No[[:space:]]|kipping[[:space:]]patch|skipping[[:space:]]incompatible[[:space:]]|t[[:space:]]seem[[:space:]]to[[:space:]]find[[:space:]]a[[:space:]]patch|t[[:space:]]find[[:space:]]file[[:space:]]to[[:space:]]patch|[[:space:]]not[[:space:]]supported|^Usage:[[:space:]]|option[[:space:]]requires[[:space:]]|memory[[:space:]]exhausted|cannot[[:space:]]stat[[:space:]]|SlackBuild:[[:space:]]line|No[[:space:]]such[[:space:]]file|[Uu]nrecognised[[:space:]]xattr|[Uu]nknown[[:space:]]option|[Ss]egmentation[[:space:]]fault|unrecognized[[:space:]]options|unable[[:space:]]to[[:space:]]create[[:space:]]an[[:space:]]executable|space[[:space:]]left|No[[:space:]]rule[[:space:]]to[[:space:]]make[[:space:]]target|unfinished[[:space:]]jobs|[Tt]raceback[[:space:]]|[Ff]ailed[[:space:]]to[[:space:]]build|insecure[[:space:]]/tmp[[:space:]]rpath" \
     "$ITEMLOG"
   return 0
 }
