@@ -362,8 +362,10 @@ function calculate_item_status
             [ -n "$title" ] && STATUSINFO[$itemid]="${STATUSINFO[$itemid]} \"$title\""
             return 0
           done
-          # nothing important has changed, so we can bump the item's stored revision from $pkgrev to $currrev without rebuilding :)
+          # nothing important has changed, so we can bump the item's and its dependees' stored revision from $pkgrev to $currrev
+          # without rebuilding :)
           if [ "$OPT_DRY_RUN" != 'y' ]; then
+            db_update_deps_rev "$itemid" "$pkgrev" "$currrev"
             db_set_rev "$itemid" '/' "$pkgdeps" "$pkgver" "$pkgblt" "$currrev" "$pkgos" "$pkghnt"
           fi
         else
