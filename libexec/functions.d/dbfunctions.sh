@@ -460,6 +460,24 @@ function db_set_rev
   return 0
 }
 
+function db_update_deps_rev
+# Update dependency revision for _all_ dependees that have the particular dependency on the deps list
+# $1 = depid
+# $2 = dep previous revision
+# $3 = dep current revision
+{
+  [ -z "$1" -o -z "$2" -o -z "$3" ] && return 1
+  local depid="$1"
+  local pkgrev="$2"
+  local currrev="$3"
+  [ "$depid" = '/' ] && return 1
+  sqlite3 "$SR_DATABASE" \
+    "update revisions set rev='$currrev' where dep='$depid' and rev='$pkgrev';"
+  dbstat=$?
+  [ "$dbstat" != 0 ] && { db_error "$dbstat" ; return 1; }
+  return 0
+}
+
 function db_get_rev
 # Get revision data for an item
 # Prints "deplist version built rev os hintcksum" to standard output
