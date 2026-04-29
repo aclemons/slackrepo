@@ -32,7 +32,11 @@ function db_init
 
   "$latestschema")
       # database schema is up to date :D
-      : ;;
+      # silently backfill any new estimates added since the database was first created
+      if [ -f /usr/share/slackrepo/"$OPT_REPO"/buildsecs_"$SYS_ARCH".sql ]; then
+        sqlite3 "$SR_DATABASE" < /usr/share/slackrepo/"$OPT_REPO"/buildsecs_"$SYS_ARCH".sql
+      fi
+      ;;
 
   '')
       # DATABASE SCHEMA NEEDS TO BE CREATED
