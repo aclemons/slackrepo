@@ -447,7 +447,12 @@ fi
 
 # If SR_NUMJOBS or SR_ARCH not set, work them out and set them explicitly
 if [ -z "$SR_NUMJOBS" ]; then
-  SR_NUMJOBS="-j$(( SYS_NPROC * 2 )) -l$(( SYS_NPROC + 1 ))"
+  IS_MODERN=$(grep -Eqw 'lm|asimd' /proc/cpuinfo && echo "yes" || echo "no")
+  if [ "$IS_MODERN" = "yes" ]; then
+    SR_NUMJOBS="-j$(( SYS_NPROC + 1 )) -l$(( SYS_NPROC + 1 ))"
+  else
+    SR_NUMJOBS="-j$(( SYS_NPROC * 2 )) -l$(( SYS_NPROC + 1 ))"
+  fi
 fi
 # setting ARCH breaks lots of SlackBuilds, which is why we do it ;-)
 if [ -z "$SR_ARCH" ] || [ "$SR_ARCH" = '%ARCH%' ]; then
