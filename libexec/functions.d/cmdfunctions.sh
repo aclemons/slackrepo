@@ -381,7 +381,7 @@ function remove_command
   # Preliminary messages:
   if [ "$itemid" = "$ITEMID" ]; then
     log_itemstart "$itemid"
-    if [ "${STATUS[$itemid]}" = 'removed' ] || [ -z "$itemdir" ] || [ ! -d "$SR_SBREPO"/"$itemdir"/ ]; then
+    if [ "${STATUS[$itemid]}" = 'removed' ] || [ -z "$itemdir" ]; then
       log_important "$itemid has been removed."
       log_normal ""
       return 0
