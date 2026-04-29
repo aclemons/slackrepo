@@ -26,17 +26,24 @@ if [ ! -f "${DATABASE}" ]; then
   exit 1
 fi
 
-echo "begin transaction;" > "${DUMPFILE}"
-echo -e ".separator ''\n${Query}" | sqlite3 "${DATABASE}" | \
-  while read sqlrow; do
-    itemid=$(echo "$sqlrow" | sed -e "s/.* values ('//" -e "s/'.*//")
-    if [ -d "$(dirname "$DATABASE")/slackbuilds/$itemid" ]; then
-      echo "$sqlrow" >> "${DUMPFILE}"
-    else
-      echo "Omitting removed item: $itemid"
-    fi
-  done
-echo "commit;" >> "${DUMPFILE}"
+SLACKBUILDS_DIR="$(dirname "$DATABASE")/slackbuilds"
+
+{
+  echo "begin transaction;"
+  echo -e ".separator ''\n${Query}" | sqlite3 "${DATABASE}" | \
+    while IFS= read -r sqlrow; do
+      temp="${sqlrow##* (}"
+      temp="${temp#?}"
+      itemid="${temp%%,*}"
+      itemid="${itemid%?}"
+      if [ -d "${SLACKBUILDS_DIR}/$itemid" ]; then
+        echo "$sqlrow"
+      else
+        echo "Omitting removed item: $itemid" >&2
+      fi
+    done
+  echo "commit;"
+} > "${DUMPFILE}"
 
 echo "$(grep -c ' values ' "${DUMPFILE}") rows written to ${DUMPFILE}"
 
