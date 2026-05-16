@@ -378,7 +378,7 @@ function test_package
         log_info -t -a "$wrongstuff"
       retstat=1
     fi
-    badlist='(usr/local/|usr/share/man/|usr/share/icons/?*/icon-theme.cache|usr/share/mime.cache|usr/info/dir|*/perllocal.pod)'
+    badlist='(usr/local/|usr/share/man/|usr/share/icons/([^/]+/)*icon-theme.cache|usr/share/mime.cache|usr/info/dir|([^/]+/)+perllocal.pod)'
     wrongstuff=$(awk '$6~/^'"$(echo "$badlist" | sed -e 's:[\./]:\\&:g')"'/' <"$MY_PKGCONTENTS")
     if [ -n "$wrongstuff" ]; then
       log_warning -a -s "${itemid}: Bad directories/files" && \
