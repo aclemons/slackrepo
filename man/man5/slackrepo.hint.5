@@ -334,16 +334,6 @@ PYTHON3=”yes” option, and if necessary patch the SlackBuild to support
 python3.
 .
 .PP
-\fBqt6\fR
-.
-.PP
-Force the sourcing of qt6.sh. When building with a chroot, qt6 will be
-installed into the chroot during the build, but slackrepo will source the
-profile script from outside. The script includes a conditional check for it
-being installed, so it ends up being a no-op and any builds which are relying
-on qmake6 etc will fail.
-.
-.PP
 \fBkernelmodule\fR and \fBkernel\fR
 .
 .PP
