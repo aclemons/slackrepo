@@ -108,7 +108,7 @@ should do, and the package will be skipped.
 .
 .PP
 This hint redefines md5sums that replace the md5sums specified in the
-.info file, for example if you have also redefined VERSION=, or if the
+\&.info file, for example if you have also redefined VERSION=, or if the
 upstream source archive has been changed.
 .
 .PP
@@ -330,7 +330,7 @@ separated by spaces. The following pragmas are available:
 .
 .PP
 Force python3 support: add python3 to the dependencies, set the
-PYTHON3=”yes” option, and if necessary patch the SlackBuild to support
+PYTHON3="yes" option, and if necessary patch the SlackBuild to support
 python3.
 .
 .PP
@@ -341,7 +341,7 @@ Rebuild when the build host's kernel is upgraded; 'kernelmodule' also
 causes depmod to be run when the package is uninstalled.
 .
 .PP
-\fkernelversion\fR
+\fBkernelversion\fR
 .
 .PP
 Force uname to return the KERNEL env var as the version. This is useful if you
@@ -441,7 +441,7 @@ control argument. Use this if you get the error message
 .
 .PP
 URL decode the values from DOWNLOAD before using them. Might need to be combined
-with \fdownload_basename\fR if the slackbuild has a url-encoded DOWNLOAD
+with \fBdownload_basename\fR if the slackbuild has a url-encoded DOWNLOAD
 configured and the slackbuilds expects the percent-encoded values.
 .
 .PP
