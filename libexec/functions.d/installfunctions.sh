@@ -380,22 +380,33 @@ function is_installed
 #-------------------------------------------------------------------------------
 
 function dotprofilizer
-# Execute the /etc/profile.d scriptlets that came with a specific package
+# Execute the /etc/profile.d scriptlets that came with a specific package or
+# when building with a chroot, append them to CHROOT_PROFILE_SOURCES where they
+# will be executed as part of the build command in the same shell which run the
+# slackbuild.
 # $1 = path of package
 # Return status: always 0
 {
   local pkgpath="$1"
-  local varlogpkg script
+  local varlogpkg script scriptfile
   # examine /var/log/packages/xxxx because it's quicker than looking inside a .t?z
   varlogpkg="${MY_CHRDIR}"/var/log/packages/$(basename "${pkgpath/%.t?z/}")
   if grep -q -E '^etc/profile\.d/.*\.sh(\.new)?' "$varlogpkg"; then
     while read -r script; do
+      scriptfile=''
       if [ -f "${MY_CHRDIR}"/"$script" ]; then
-        log_info -a "  Running profile script: /$script"
-        . "${MY_CHRDIR}"/"$script"
+        scriptfile="/$script"
       elif [ -f "${MY_CHRDIR}"/"$script".new ]; then
-        log_info -a "  Running profile script: /$script.new"
-        . "${MY_CHRDIR}"/"$script".new
+        scriptfile="/${script}.new"
+      fi
+      [ -z "$scriptfile" ] && continue
+      if [ -n "${MY_CHRDIR}" ]; then
+        # Defer sourcing until the build runs inside the chroot
+        log_info -a "  Deferring profile script for chroot: $scriptfile"
+        CHROOT_PROFILE_SOURCES+=( "$scriptfile" )
+      else
+        log_info -a "  Running profile script: $scriptfile"
+        . "$scriptfile"
       fi
     done < <(grep '^etc/profile\.d/.*\.sh' "$varlogpkg" | sed 's/.new$//')
   fi

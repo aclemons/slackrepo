@@ -260,13 +260,6 @@ function build_item_packages
       # Add 'PYTHON3=yes' to options, for the 'other' kind of python3 SlackBuild
       SLACKBUILDOPTS="$SLACKBUILDOPTS PYTHON3=yes"
       ;;
-    'qt6' )
-      # qt6.sh has a conditional in it and the normal source of the profile
-      # script won't work when building with a chroot since the sourcing happens
-      # outside.
-      log_info -a "Pragma: qt6"
-      sed -i -e "s/^qmake6/source \/etc\/profile.d\/qt6.sh \&\& &/" "$TMP_SLACKBUILD"/"$itemfile"
-      ;;
     'stubs-32' )
       if [ "$SYS_ARCH" = 'x86_64' ] && [ ! -e /usr/include/gnu/stubs-32.h ]; then
         log_info -a "Pragma: stubs-32"
@@ -413,6 +406,9 @@ function build_item_packages
     chroot_setup || return 1
   fi
 
+  # Holds profile scripts to source inside the chroot before the build
+  CHROOT_PROFILE_SOURCES=()
+
   # Get all dependencies installed
   install_deps "$itemid"
   if [ $? != 0 ]; then
@@ -458,6 +454,17 @@ function build_item_packages
   # Start the resource monitor
   resource_monitor "$ITEMLOGDIR"/resource.log &
   resmonpid=$!
+
+  # Prepend deferred profile script sources to the build command.
+  # Some may have conditional logic and will only accurate in the chroot and
+  # not on the host.
+  if [ ${#CHROOT_PROFILE_SOURCES[@]} -gt 0 ]; then
+    local profileprefix=''
+    for _profilescript in "${CHROOT_PROFILE_SOURCES[@]}"; do
+      profileprefix="${profileprefix}. '${_profilescript}'; "
+    done
+    SLACKBUILDCMD="${profileprefix}${SLACKBUILDCMD}"
+  fi
 
   # Build it
   MY_STARTSTAMP="$MYTMP"/startstamp
