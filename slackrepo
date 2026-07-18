@@ -566,12 +566,14 @@ mkdir -p "$SR_TMP" || { log_error "Failed to create $SR_TMP"; exit_cleanup 4; }
 
 # We need a slackrepo-specific temporary directory, for small stuff only
 MYTMP=$(mktemp -t -d slackrepo.XXXXXX) || { log_error "Failed to create temporary directory"; exit_cleanup 4; }
+chmod 711 "$MYTMP" || { log_error "Failed to chmod $MYTMP"; exit_cleanup 4; }
 # Mount a tmpfs on MYTMP: (1) it's fast, (2) we might already be in an overlay,
 # and you can't have upperdir or workdir on an overlay
 ${SUDO}mount -t tmpfs -o defaults,mode=1777 tmpfs "$MYTMP" || { log_error "Failed to mount $MYTMP"; exit_cleanup 4; }
 
 # We need a temporary directory for big stuff too
 BIGTMP=$(mktemp -t -p "$SR_TMP" -d slackrepo.XXXXXX) || { log_error "Failed to create directory in $SR_TMP"; exit_cleanup 4; }
+chmod 711 "$BIGTMP" || { log_error "Failed to chmod $BIGTMP"; exit_cleanup 4; }
 
 #### Probably should make --keep-tmp force $TMP into $MYTMP
 
