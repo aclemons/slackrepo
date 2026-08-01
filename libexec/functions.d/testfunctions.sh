@@ -185,11 +185,11 @@ function test_download
         curl --disable --connect-timeout 10 --retry 2 --fail --verbose --insecure --ciphers ALL --disable-epsv --ftp-method nocwd --location --user-agent slackrepo --head --output "$MY_HEADER" "$url" >> "$ITEMLOG" 2>&1
         curlstat=$?
         if [ "$curlstat" = 0 ]; then
-          remotelength=$(fromdos <"$MY_HEADER" | grep '[Cc]ontent-[Ll]ength: ' | tail -n 1 | sed 's/^.* //')
+          remotelength=$(fromdos <"$MY_HEADER" | awk '/^HTTP\// {cl=""} /[Cc]ontent-[Ll]ength: / {cl=$NF} END {print cl}')
           # Proceed only if we seem to have extracted a valid content-length.
           if [ -n "$remotelength" ] && [ "$remotelength" != 0 ]; then
             # Filenames that have %nn encodings won't get checked.
-            filename=$(fromdos <"$MY_HEADER" | grep '[Cc]ontent-[Dd]isposition:.*filename=' | sed -e 's/^.*filename=//' -e 's/^"//' -e 's/"$//' -e 's/\%20/ /g' -e 's/\%7E/~/g')
+            filename=$(fromdos <"$MY_HEADER" | awk '/^HTTP\// {cd=""} /[Cc]ontent-[Dd]isposition:.*filename=/ {cd=$0} END {print cd}' | sed -e 's/^.*filename=//' -e 's/^"//' -e 's/"$//' -e 's/\%20/ /g' -e 's/\%7E/~/g')
             # If no Content-Disposition, we'll have to guess:
             [ -z "$filename" ] && filename="$(basename "$url")"
             if [ -f "${SRCDIR[$itemid]}"/"$filename" ]; then
