@@ -483,7 +483,7 @@ function test_package
     fi
 
     # check for uncompressed man pages (usr/share/man warning is handled above)
-    wrongstuff=$(grep -E '^-.* usr/(share/)?man/' "$MY_PKGCONTENTS" | grep -v '\.gz$')
+    wrongstuff=$(grep -E '^-.* usr/(share/)?man/' "$MY_PKGCONTENTS" | grep -v '\.gz$' -v '\.xz$')
     if [ -n "$wrongstuff" ]; then
       log_warning -a -s "${itemid}: Uncompressed man pages" && \
         log_info -t -a "$wrongstuff"
